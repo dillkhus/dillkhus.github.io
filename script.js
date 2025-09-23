@@ -33,15 +33,15 @@ class OrderManager {
             });
         });
 
-        // Quantity selectors for combo platters
-        document.querySelectorAll('.platter-option .quantity').forEach(select => {
-            select.addEventListener('change', (e) => {
+        // Quantity selectors for combo platters - use event delegation for better reliability
+        document.addEventListener('change', (e) => {
+            if (e.target.classList.contains('quantity') && e.target.closest('.platter-option')) {
                 const comboType = e.target.dataset.combo;
                 const quantity = parseInt(e.target.value);
                 const price = this.order.isPreorder ? 10 : 12; // Pre-order vs regular price
                 
                 this.updateComboQuantity(comboType, quantity, price);
-            });
+            }
         });
 
         // Platter menu radio button selections
@@ -164,7 +164,11 @@ class OrderManager {
         } else {
             // Show customization options when quantity > 0
             if (platterCustomization) {
+                // First set display to block to make it visible
                 platterCustomization.style.display = 'block';
+                // Force a reflow to ensure the element is rendered
+                platterCustomization.offsetHeight;
+                // Then set the other properties for the transition
                 platterCustomization.style.opacity = '1';
                 platterCustomization.style.height = 'auto';
                 platterCustomization.style.overflow = 'visible';
@@ -665,8 +669,15 @@ class OrderManager {
             // Add success animation
             confirmationSection.classList.add('confirmation-success');
             
-            // Scroll to confirmation
-            confirmationSection.scrollIntoView({ behavior: 'smooth' });
+            // Enhanced smooth scroll to confirmation
+            if ('scrollBehavior' in document.documentElement.style) {
+                confirmationSection.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            } else {
+                smoothScrollTo(confirmationSection, 800);
+            }
             
             // Reset form after a delay
             setTimeout(() => {
@@ -793,25 +804,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Smooth scroll to top when clicked
+    // Enhanced smooth scroll to top when clicked
     backToTopButton.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+        // Check if browser supports smooth scrolling
+        if ('scrollBehavior' in document.documentElement.style) {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        } else {
+            // Fallback for older browsers
+            smoothScrollTo(document.body, 600);
+        }
     });
     initHeaderScroll();
     
-    // Add some visual feedback for interactions
-    document.querySelectorAll('.food-item, .platter-option').forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            item.style.transform = 'translateY(-5px)';
-        });
-        
-        item.addEventListener('mouseleave', () => {
-            item.style.transform = 'translateY(0)';
-        });
-    });
+    // Visual feedback is handled by CSS hover effects
 
     // Add loading animation for place order button
     document.getElementById('placeOrder').addEventListener('click', function() {
@@ -826,14 +834,79 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Add smooth scrolling for better UX
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
+// Enhanced smooth scrolling for all devices and browsers
+function smoothScrollTo(target, duration = 800) {
+    const targetElement = typeof target === 'string' ? document.querySelector(target) : target;
+    if (!targetElement) return;
+
+    const startPosition = window.pageYOffset;
+    const targetPosition = targetElement.offsetTop - 140; // Account for fixed header
+    const distance = targetPosition - startPosition;
+    let startTime = null;
+
+    function animation(currentTime) {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const run = easeInOutQuad(timeElapsed, startPosition, distance, duration);
+        window.scrollTo(0, run);
+        if (timeElapsed < duration) requestAnimationFrame(animation);
+    }
+
+    // Easing function for smooth animation
+    function easeInOutQuad(t, b, c, d) {
+        t /= d / 2;
+        if (t < 1) return c / 2 * t * t + b;
+        t--;
+        return -c / 2 * (t * (t - 2) - 1) + b;
+    }
+
+    requestAnimationFrame(animation);
+}
+
+// Generic smooth scrolling for all anchor links
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle all anchor links with performance optimization
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                // Check if browser supports smooth scrolling
+                if ('scrollBehavior' in document.documentElement.style) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                } else {
+                    // Fallback for older browsers
+                    smoothScrollTo(targetElement);
+                }
+            }
+        }, { passive: false }); // Allow preventDefault
     });
+
+    // Enhanced smooth scrolling for programmatic calls
+    window.smoothScrollTo = smoothScrollTo;
+    
+    // Performance optimization: Use passive listeners for scroll events
+    let ticking = false;
+    
+    function updateScrollPosition() {
+        // Any scroll-based updates can go here
+        ticking = false;
+    }
+    
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(updateScrollPosition);
+            ticking = true;
+        }
+    }
+    
+    // Add passive scroll listener for better performance
+    window.addEventListener('scroll', requestTick, { passive: true });
 });
 
 // Add keyboard navigation support
@@ -846,22 +919,40 @@ document.addEventListener('keydown', (e) => {
 // Add mobile-friendly touch events
 if ('ontouchstart' in window) {
     document.querySelectorAll('.food-item, .platter-option').forEach(item => {
+        let touchStartY = 0;
+        let touchStartX = 0;
+        let isScrolling = false;
+        
         item.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            item.style.transform = 'scale(0.98)';
-            item.style.transition = 'transform 0.1s ease';
+            touchStartY = e.touches[0].clientY;
+            touchStartX = e.touches[0].clientX;
+            isScrolling = false;
+        });
+        
+        item.addEventListener('touchmove', (e) => {
+            const touchY = e.touches[0].clientY;
+            const touchX = e.touches[0].clientX;
+            const deltaY = Math.abs(touchY - touchStartY);
+            const deltaX = Math.abs(touchX - touchStartX);
+            
+            // If vertical movement is greater than horizontal, it's likely a scroll
+            if (deltaY > deltaX && deltaY > 10) {
+                isScrolling = true;
+            }
         });
         
         item.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            item.style.transform = 'scale(1)';
-            item.style.transition = 'transform 0.2s ease';
+            if (!isScrolling) {
+                item.style.transform = 'scale(1)';
+                item.style.transition = 'transform 0.2s ease';
+            }
         });
         
         item.addEventListener('touchcancel', (e) => {
-            e.preventDefault();
-            item.style.transform = 'scale(1)';
-            item.style.transition = 'transform 0.2s ease';
+            if (!isScrolling) {
+                item.style.transform = 'scale(1)';
+                item.style.transition = 'transform 0.2s ease';
+            }
         });
     });
     
@@ -871,9 +962,13 @@ if ('ontouchstart' in window) {
     // Improve touch interaction for selects on mobile
     document.querySelectorAll('select.quantity').forEach(element => {
         element.addEventListener('touchstart', (e) => {
-            // Prevent double-tap zoom on iOS
-            e.preventDefault();
-            // Trigger the native select
+            // Only prevent default for actual taps, not scrolls
+            const touch = e.touches[0];
+            const startY = touch.clientY;
+            const startX = touch.clientX;
+            
+            // Allow scrolling by not preventing default
+            // Just focus the element for better UX
             element.focus();
         });
     });

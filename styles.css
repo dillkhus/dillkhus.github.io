@@ -7,6 +7,8 @@
 
 html {
     scroll-behavior: smooth;
+    /* Fallback for browsers that don't support scroll-behavior */
+    scroll-padding-top: 140px; /* Account for fixed header */
 }
 
 body {
@@ -14,7 +16,13 @@ body {
     background-color: #f5f0e8;
     color: #333;
     line-height: 1.6;
-    -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
+    /* Enhanced smooth scrolling for all devices */
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    /* Prevent horizontal scroll */
+    overflow-x: hidden;
+    /* Smooth scrolling fallback */
+    scroll-padding-top: 140px;
 }
 
 /* Header Styles */
@@ -43,6 +51,54 @@ body {
     }
     body {
         padding-top: 0 !important;
+    }
+}
+
+/* Enhanced smooth scrolling for all devices */
+* {
+    scroll-behavior: smooth;
+}
+
+/* Disable hover effects on touch devices to prevent scroll issues */
+@media (hover: none) and (pointer: coarse) {
+    .logo-image:hover,
+    .offer-content:hover,
+    .preorder-notice:hover,
+    .food-item:hover,
+    .food-item:hover .image-placeholder,
+    .quantity:hover,
+    .platter-instance:hover,
+    .radio-label:hover,
+    .platter-option:hover,
+    .platter-item:hover,
+    .warning-close:hover,
+    .place-order-btn:hover,
+    .back-to-top:hover,
+    .back-to-top:hover .arrow {
+        transform: none !important;
+        box-shadow: none !important;
+        filter: none !important;
+        border-color: inherit !important;
+    }
+}
+
+/* Smooth scrolling enhancements for mobile devices */
+@media (max-width: 768px) {
+    html {
+        scroll-padding-top: 0; /* No fixed header on mobile */
+    }
+    
+    body {
+        scroll-padding-top: 0;
+        /* Enhanced touch scrolling */
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+    
+    /* Prevent bounce scrolling on iOS */
+    body {
+        position: relative;
+        overflow-x: hidden;
     }
 }
 
@@ -660,7 +716,6 @@ body {
 }
 
 .food-item:hover {
-    transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     border-color: #dc2626;
 }
@@ -699,7 +754,6 @@ body {
 }
 
 .food-item:hover .image-placeholder {
-    transform: scale(1.05);
     box-shadow: 0 2px 8px rgba(220, 38, 38, 0.15);
 }
 
@@ -863,7 +917,7 @@ body {
     opacity: 0;
     height: 0;
     overflow: hidden;
-    transition: opacity 0.3s ease, height 0.3s ease;
+    transition: opacity 0.3s ease, height 0.3s ease, max-height 0.3s ease;
 }
 
 .platter-customization h3 {
