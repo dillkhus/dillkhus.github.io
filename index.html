@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dil Khush Homemade - Order Online</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -136,7 +136,7 @@
                     <div class="dietary-indicator veg">100% VEG</div>
                     <div class="pricing">
                         <div class="regular-price">2 pcs ...... 4€</div>
-                        <div class="preorder-price">*10 pcs ...... 9€</div>
+                        <div class="preorder-price">*1 plate(10 pcs) ...... 9€</div>
                     </div>
                     <div class="quantity-selector">
                         <label>Quantity:</label>
@@ -227,7 +227,7 @@
 
         <!-- Combo Platters -->
         <section class="combo-section">
-            <h2>Combo Platters</h2>
+            <h2>Customize your Combo Platters!!</h2>
             <div class="combo-container">
                 <div class="combo-banner">COMBO PLATTER</div>
                 <div class="combo-image">
@@ -238,16 +238,16 @@
                         <div class="platter-icon veg">100% VEG</div>
                         <div class="platter-items">
                             <div class="platter-item">
-                                <div class="item-number">1.</div>
-                                <div class="item-text">Phuchka / Papri Chaat</div>
+                                <div class="item-number">1</div>
+                                <div class="item-text">Phuchka or Papri Chaat</div>
                             </div>
                             <div class="platter-item">
-                                <div class="item-number">2.</div>
+                                <div class="item-number">2</div>
                                 <div class="item-text">Honey Chilli Cauliflower</div>
                             </div>
                             <div class="platter-item">
-                                <div class="item-number">3.</div>
-                                <div class="item-text">Chana Pora</div>
+                                <div class="item-number">3</div>
+                                <div class="item-text">Chena Pora or Narkel Naru</div>
                             </div>
                         </div>
                         <div class="platter-pricing">
@@ -276,16 +276,16 @@
                         <div class="platter-icon non-veg">NON VEG</div>
                         <div class="platter-items">
                             <div class="platter-item">
-                                <div class="item-number">1.</div>
-                                <div class="item-text">Phuchka / Papri Chaat</div>
+                                <div class="item-number">1</div>
+                                <div class="item-text">Phuchka or Papri Chaat</div>
                             </div>
                             <div class="platter-item">
-                                <div class="item-number">2.</div>
-                                <div class="item-text">Chicken 65 / Chicken Shami Kabab</div>
+                                <div class="item-number">2</div>
+                                <div class="item-text">Chicken 65 or Chicken Shami Kabab</div>
                             </div>
                             <div class="platter-item">
-                                <div class="item-number">3.</div>
-                                <div class="item-text">Chana Pora</div>
+                                <div class="item-number">3</div>
+                                <div class="item-text">Chena Pora or Narkel Naru</div>
                             </div>
                         </div>
                         <div class="platter-pricing">
@@ -358,7 +358,7 @@
                             </label>
                             <div id="bizumVerification" class="bizum-verification" style="display: none;">
                                 <div class="form-group">
-                                    <label for="bizumNumber">Bizum sender's name or the number to track your transfer: <span class="required">*</span></label>
+                                    <label for="bizumNumber">Bizum sender's number to track your transfer: <span class="required">*</span></label>
                                     <input type="tel" 
                                            id="bizumNumber" 
                                            name="bizumNumber" 
@@ -386,6 +386,15 @@
                 <input type="hidden" id="isPreorder" name="isPreorder" value="true">
             </form>
         </section>
+
+        <!-- Warning Messages -->
+        <div id="warningContainer" class="warning-container" style="display: none;">
+            <div class="warning-message">
+                <div class="warning-icon">⚠️</div>
+                <div class="warning-text" id="warningText"></div>
+                <button class="warning-close" id="warningClose">×</button>
+            </div>
+        </div>
 
         <!-- Order Summary -->
         <section class="order-summary">

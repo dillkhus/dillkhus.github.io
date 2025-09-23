@@ -16,6 +16,9 @@ class OrderManager {
     }
 
     initializeEventListeners() {
+        // Initialize warning system
+        this.initializeWarningSystem();
+
         // Quantity selectors for individual items
         document.querySelectorAll('.food-item .quantity').forEach(select => {
             select.addEventListener('change', (e) => {
@@ -122,16 +125,25 @@ class OrderManager {
                     </div>
                 </div>
                 ` : ''}
+                ${isVeg ? `
                 <div class="fixed-items">
-                    ${isVeg ? `
                     <div class="fixed-item">
                         <span class="item-label">Item 2:</span>
                         <span class="item-value">Honey Chilli Cauliflower</span>
                     </div>
-                    ` : ''}
-                    <div class="fixed-item">
-                        <span class="item-label">Item ${isVeg ? '3' : '3'}:</span>
-                        <span class="item-value">Chana Pora</span>
+                </div>
+                ` : ''}
+                <div class="customization-option">
+                    <label>Choose Item ${isVeg ? '3' : '3'}:</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="${comboType}-platter-${platterIndex}-option3" value="chana-pora" checked>
+                            Chena Pora
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="${comboType}-platter-${platterIndex}-option3" value="narkel-naru">
+                            Narkel Naru
+                        </label>
                     </div>
                 </div>
             </div>
@@ -190,11 +202,11 @@ class OrderManager {
                 return {
                     option1: existingCustomization.option1 || 'phuchka',
                     ...(isVeg ? {
-                        option2: 'honey-chilli-cauliflower',
-                        option3: 'chana-pora'
+                        option2: 'honey-chilli-cauliflower', // Fixed for veg platters
+                        option3: existingCustomization.option3 || 'chana-pora'
                     } : {
                         option2: existingCustomization.option2 || 'chicken-65',
-                        option3: 'chana-pora'
+                        option3: existingCustomization.option3 || 'chana-pora'
                     })
                 };
             });
@@ -207,11 +219,15 @@ class OrderManager {
                     const option1Radio = platterInstance.querySelector(`input[name="${comboType}-platter-${index}-option1"][value="${customization.option1}"]`);
                     if (option1Radio) option1Radio.checked = true;
 
-                    // Set option2 for non-veg (Chicken 65/Chicken Shami Kabab)
+                    // Set option2 for non-veg (Chicken 65/Chicken Shami Kabab) only
                     if (!isVeg) {
                         const option2Radio = platterInstance.querySelector(`input[name="${comboType}-platter-${index}-option2"][value="${customization.option2}"]`);
                         if (option2Radio) option2Radio.checked = true;
                     }
+
+                    // Set option3 (Chena Pora/Narkel Naru)
+                    const option3Radio = platterInstance.querySelector(`input[name="${comboType}-platter-${index}-option3"][value="${customization.option3}"]`);
+                    if (option3Radio) option3Radio.checked = true;
                 }
             });
 
@@ -219,7 +235,14 @@ class OrderManager {
             customizationContainer.querySelectorAll('input[type="radio"]').forEach(radio => {
                 radio.addEventListener('change', (e) => {
                     const platterIndex = parseInt(e.target.closest('.platter-instance').dataset.platterIndex);
-                    const optionNumber = e.target.name.includes('option1') ? 'option1' : 'option2';
+                    let optionNumber;
+                    if (e.target.name.includes('option1')) {
+                        optionNumber = 'option1';
+                    } else if (e.target.name.includes('option2')) {
+                        optionNumber = 'option2';
+                    } else if (e.target.name.includes('option3')) {
+                        optionNumber = 'option3';
+                    }
                     this.order.combos[comboType].customizations[platterIndex][optionNumber] = e.target.value;
                     this.updateOrderSummary();
                 });
@@ -308,7 +331,7 @@ class OrderManager {
                                     `<div>• Honey Chilli Cauliflower</div>` : 
                                     `<div>• ${this.formatItemName(customization.option2)}</div>`
                                 }
-                                <div>• Chana Pora</div>
+                                <div>• ${this.formatItemName(customization.option3)}</div>
                             </div>
                         `;
                         customizationsContainer.appendChild(platterDetails);
@@ -363,6 +386,37 @@ class OrderManager {
             'chicken-shami-kabab': 'Chicken Shami Kabab'
         };
         return nameMap[itemName] || itemName;
+    }
+
+    initializeWarningSystem() {
+        const warningClose = document.getElementById('warningClose');
+        if (warningClose) {
+            warningClose.addEventListener('click', () => {
+                this.hideWarning();
+            });
+        }
+    }
+
+    showWarning(message) {
+        const warningContainer = document.getElementById('warningContainer');
+        const warningText = document.getElementById('warningText');
+        
+        if (warningContainer && warningText) {
+            warningText.textContent = message;
+            warningContainer.style.display = 'block';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                this.hideWarning();
+            }, 5000);
+        }
+    }
+
+    hideWarning() {
+        const warningContainer = document.getElementById('warningContainer');
+        if (warningContainer) {
+            warningContainer.style.display = 'none';
+        }
     }
 
     validateForm() {
@@ -494,12 +548,12 @@ class OrderManager {
         const selectedPayment = document.querySelector('input[name="paymentType"]:checked');
         
         if (!name || !mobile || !selectedPayment) {
-            alert('Please fill in all required fields (name, mobile number, and payment method).');
+            this.showWarning('Please fill in all required fields (name, mobile number, and payment method).');
             return;
         }
 
         if (!this.hasItemsInOrder()) {
-            alert('Please select at least one item to order.');
+            this.showWarning('Please select at least one item to order.');
             return;
         }
 
@@ -555,7 +609,7 @@ class OrderManager {
             }
         } catch (error) {
             console.error('Error processing order:', error);
-            alert('There was an error processing your order. Please try again or contact support.');
+            this.showWarning('There was an error processing your order. Please try again or contact support.');
         } finally {
             // Reset button state
             const placeOrderBtn = document.getElementById('placeOrder');
@@ -636,7 +690,14 @@ class OrderManager {
                                     if (platterInstance) {
                                         const platterIndex = parseInt(platterInstance.dataset.platterIndex);
                                         const comboType = e.target.name.split('-')[0]; // 'veg' or 'non-veg'
-                                        const optionNumber = e.target.name.includes('option1') ? 'option1' : 'option2';
+                                        let optionNumber;
+                                        if (e.target.name.includes('option1')) {
+                                            optionNumber = 'option1';
+                                        } else if (e.target.name.includes('option2')) {
+                                            optionNumber = 'option2';
+                                        } else if (e.target.name.includes('option3')) {
+                                            optionNumber = 'option3';
+                                        }
                                         
                                         if (this.order.combos[comboType] && 
                                             this.order.combos[comboType].customizations && 
@@ -807,20 +868,13 @@ if ('ontouchstart' in window) {
     // Improve touch scrolling
     document.body.style.webkitOverflowScrolling = 'touch';
     
-    // Prevent zoom on input focus (iOS)
-    document.querySelectorAll('input, select').forEach(element => {
-        element.addEventListener('focus', () => {
-            if (window.innerWidth < 768) {
-                const viewport = document.querySelector('meta[name="viewport"]');
-                viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
-            }
-        });
-        
-        element.addEventListener('blur', () => {
-            if (window.innerWidth < 768) {
-                const viewport = document.querySelector('meta[name="viewport"]');
-                viewport.setAttribute('content', 'width=device-width, initial-scale=1');
-            }
+    // Improve touch interaction for selects on mobile
+    document.querySelectorAll('select.quantity').forEach(element => {
+        element.addEventListener('touchstart', (e) => {
+            // Prevent double-tap zoom on iOS
+            e.preventDefault();
+            // Trigger the native select
+            element.focus();
         });
     });
 }
@@ -871,6 +925,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Add mobile-specific CSS classes
 const mobileCSS = `
+/* Mobile-specific quantity selector improvements */
+.mobile-device .quantity {
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border-radius: 8px;
+    background-color: #ffffff;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Add extra padding around the quantity selector on mobile */
+.mobile-device .quantity-selector {
+    padding: 8px 0;
+    margin: 8px 0;
+}
+
+/* Improve touch feedback */
+.mobile-device .quantity:active {
+    background-color: #f9fafb;
+}
 .mobile-device .food-item {
     margin-bottom: 15px;
 }
