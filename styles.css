@@ -43,7 +43,169 @@ body {
     padding-top: 160px; /* Increased padding to ensure content is visible below fixed header */
 }
 
-/* Remove fixed positioning on mobile */
+/* iPad and tablet specific styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+    /* iPads in portrait and landscape - use mobile header style (not fixed) */
+    body {
+        padding-top: 0 !important; /* No fixed header padding like mobile */
+    }
+    
+    .header {
+        position: relative !important; /* Same as mobile - header scrolls with content */
+        transform: none !important;
+    }
+    
+    /* Ensure main content is visible on iPads */
+    .main-content {
+        margin-top: 20px;
+    }
+    
+    .food-items h2,
+    .customer-info h2,
+    .order-summary h2 {
+        margin-top: 20px;
+    }
+}
+
+/* iPad Pro 11-inch specific styles */
+@media (min-width: 834px) and (max-width: 1194px) {
+    /* iPad Pro 11-inch - use mobile header style (not fixed) */
+    body {
+        padding-top: 0 !important; /* No fixed header padding like mobile */
+    }
+    
+    .header {
+        position: relative !important; /* Same as mobile - header scrolls with content */
+        transform: none !important;
+    }
+    
+    /* Ensure main content is visible on iPad Pro 11-inch */
+    .main-content {
+        margin-top: 20px;
+        padding: 30px 20px; /* Adjusted padding for better spacing */
+    }
+    
+    .food-items h2,
+    .customer-info h2,
+    .order-summary h2 {
+        margin-top: 20px;
+        font-size: 2.4rem; /* Slightly larger for iPad */
+    }
+    
+    /* Header container adjustments for iPad 11-inch */
+    .header-container {
+        padding: 15px 20px; /* Adjusted padding */
+        flex-wrap: nowrap; /* Prevent wrapping */
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .logo-section {
+        flex: 0 0 auto; /* Don't grow or shrink */
+        min-width: 80px;
+    }
+    
+    .logo-image {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .price-section {
+        flex: 1; /* Take remaining space */
+        text-align: center;
+        padding: 0 20px;
+    }
+    
+    .price-title {
+        font-size: 1.8rem;
+        margin-bottom: 5px;
+    }
+    
+    .event-details {
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+    }
+    
+    .preorder-badge {
+        font-size: 0.8rem;
+        padding: 4px 8px;
+    }
+    
+    .offer-section {
+        flex: 0 0 auto; /* Don't grow or shrink */
+        min-width: 120px;
+    }
+    
+    .offer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .offer-icon {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+    }
+    
+    .offer-main {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+    
+    .offer-desc {
+        font-size: 0.7rem;
+        display: block;
+        margin-top: 2px;
+    }
+    
+    /* Food items grid adjustments for iPad 11-inch */
+    .items-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 0 10px;
+    }
+    
+    .food-item {
+        margin-bottom: 20px;
+    }
+    
+    /* Combo platters adjustments for iPad 11-inch */
+    .combo-platters {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 0 10px;
+    }
+    
+    .platter-option {
+        margin-bottom: 20px;
+    }
+}
+
+/* iPad Pro and larger tablets */
+@media (min-width: 1195px) and (max-width: 1366px) {
+    /* iPad Pro 12.9-inch and larger tablets - use mobile header style (not fixed) */
+    body {
+        padding-top: 0 !important; /* No fixed header padding like mobile */
+    }
+    
+    .header {
+        position: relative !important; /* Same as mobile - header scrolls with content */
+        transform: none !important;
+    }
+    
+    /* Ensure main content is visible on iPad Pro */
+    .main-content {
+        margin-top: 20px;
+    }
+    
+    .food-items h2,
+    .customer-info h2,
+    .order-summary h2 {
+        margin-top: 20px;
+    }
+}
+
+/* Remove fixed positioning only on small mobile devices */
 @media (max-width: 768px) {
     .header {
         position: relative !important;
@@ -82,7 +244,7 @@ body {
     }
 }
 
-/* Smooth scrolling enhancements for mobile devices */
+/* Smooth scrolling enhancements for mobile devices only */
 @media (max-width: 768px) {
     html {
         scroll-padding-top: 0; /* No fixed header on mobile */
@@ -93,12 +255,37 @@ body {
         /* Enhanced touch scrolling */
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: contain;
-    }
-    
-    /* Prevent bounce scrolling on iOS */
-    body {
+        /* Prevent bounce scrolling on iOS */
         position: relative;
         overflow-x: hidden;
+    }
+}
+
+/* iPad and tablet smooth scrolling - no header offset (mobile style) */
+@media (min-width: 769px) and (max-width: 1366px) {
+    html {
+        scroll-padding-top: 0; /* No fixed header on tablets - same as mobile */
+    }
+    
+    body {
+        scroll-padding-top: 0;
+        /* Enhanced touch scrolling for tablets */
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+}
+
+/* iPad Pro 11-inch specific smooth scrolling - no header offset */
+@media (min-width: 834px) and (max-width: 1194px) {
+    html {
+        scroll-padding-top: 0; /* No fixed header on iPad 11-inch - same as mobile */
+    }
+    
+    body {
+        scroll-padding-top: 0;
+        /* Enhanced touch scrolling for iPad 11-inch */
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
     }
 }
 

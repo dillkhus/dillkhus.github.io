@@ -840,7 +840,9 @@ function smoothScrollTo(target, duration = 800) {
     if (!targetElement) return;
 
     const startPosition = window.pageYOffset;
-    const targetPosition = targetElement.offsetTop - 160; // Account for fixed header
+    // Check if we're on a device with fixed header (desktop only)
+    const isDesktop = window.innerWidth > 1366;
+    const targetPosition = isDesktop ? targetElement.offsetTop - 160 : targetElement.offsetTop;
     const distance = targetPosition - startPosition;
     let startTime = null;
 
