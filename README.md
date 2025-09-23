@@ -1,5 +1,7 @@
 # Dil Khush Homemade - Online Ordering Website
 
+[![Deploy Website](https://github.com/dilkhush/dilkhush.github.io/actions/workflows/deploy.yml/badge.svg)](https://github.com/dilkhush/dilkhush.github.io/actions/workflows/deploy.yml)
+
 A beautiful, responsive website that replicates your price list design with full ordering functionality.
 
 ## Features
