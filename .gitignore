@@ -6,6 +6,19 @@ __pycache__/
 # C extensions
 *.so
 
+
+GOOGLESCRIPTS/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.development
+.env.test
+.env.production
+venv/
+.venv/
+
 # Distribution / packaging
 .Python
 build/

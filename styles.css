@@ -887,25 +887,26 @@ body {
 /* Food Items Grid */
 .items-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
     margin-bottom: 40px;
 }
 
 .food-item {
     background: white;
-    border-radius: 8px;
-    padding: 12px 10px;
-    text-align: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    transition: all 0.3s ease;
-    border: 1px solid #e5e7eb;
-    position: relative;
+    border-radius: 12px;
     overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .food-item:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     border-color: #dc2626;
 }
 
@@ -931,7 +932,7 @@ body {
     width: 60px;
     height: 60px;
     border: 2px solid #dc2626;
-    border-radius: 50%;
+    border-radius: 8px;
     background: linear-gradient(135deg, #fef3c7, #fde68a);
     display: flex;
     align-items: center;
@@ -954,19 +955,118 @@ body {
     right: -4px;
     bottom: -4px;
     border: 1px dashed #dc2626;
-    border-radius: 50%;
+    border-radius: 8px;
     animation: rotate 20s linear infinite;
 }
 
-.dietary-indicator {
-    display: inline-block;
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 0.75rem;
-    margin: 6px 0;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+/* Old food image styling removed - using new rectangular design above */
+
+/* New rectangular card design styles */
+.item-image-container {
+    position: relative;
+    height: 160px;
+    overflow: hidden;
 }
+
+.food-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+}
+
+.dietary-indicator {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.dietary-indicator.veg {
+    background: #10b981;
+    color: white;
+}
+
+.dietary-indicator.non-veg {
+    background: #dc2626;
+    color: white;
+}
+
+.item-content {
+    padding: 12px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.item-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+}
+
+.item-description {
+    color: #6b7280;
+    font-size: 0.85rem;
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+}
+
+.pricing {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.regular-price {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #9ca3af;
+    text-decoration: line-through;
+}
+
+.preorder-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2563eb;
+}
+
+.quantity-selector {
+    margin-top: -8px;
+}
+
+.quantity-selector label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 2px;
+}
+
+.quantity {
+    width: 100%;
+    padding: 6px 10px;
+    border: 2px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    background: white;
+    transition: border-color 0.3s ease;
+}
+
+.quantity:focus {
+    outline: none;
+    border-color: #dc2626;
+}
+
+/* Remove duplicate dietary-indicator rule - using the new one above */
 
 .dietary-indicator.veg {
     background: #10b981;
@@ -1011,13 +1111,13 @@ body {
 }
 
 .quantity-selector {
-    margin-top: 20px;
+    margin-top: -8px;
 }
 
 .quantity-selector label {
     display: block;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     color: #4b5563;
 }
 
@@ -1056,7 +1156,7 @@ body {
     text-align: center;
     box-shadow: 0 6px 20px rgba(0,0,0,0.1);
     border: 2px solid #dc2626;
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
 }
 
@@ -1081,6 +1181,41 @@ body {
     width: 120px;
     height: 120px;
     font-size: 3rem;
+}
+
+/* Combo food image styling */
+.combo-food-image {
+    width: 300px;
+    height: 200px;
+    border: 3px solid #dc2626;
+    border-radius: 12px;
+    object-fit: cover;
+    margin: 0 auto;
+    display: block;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.combo-container:hover .combo-food-image {
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+    transform: scale(1.05);
+}
+
+.combo-food-image::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border: 3px solid #fbbf24;
+    border-radius: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.combo-container:hover .combo-food-image::before {
+    opacity: 1;
 }
 
 .platter-options {
@@ -1387,7 +1522,52 @@ body {
         width: 95%;
         margin-left: auto;
         margin-right: auto;
-        padding: 8px 6px;
+        padding: 6px 4px;
+    }
+    
+    .item-image-container {
+        height: 140px;
+    }
+    
+    .item-content {
+        padding: 8px;
+    }
+    
+    .item-title {
+        font-size: 1rem;
+        margin-bottom: 3px;
+    }
+    
+    .item-description {
+        font-size: 0.8rem;
+        margin-bottom: 6px;
+    }
+    
+    .pricing {
+        margin-bottom: 8px;
+        gap: 4px;
+    }
+    
+    .regular-price {
+        font-size: 0.85rem;
+    }
+    
+    .preorder-price {
+        font-size: 0.9rem;
+    }
+    
+    .quantity-selector {
+        margin-top: -8px;
+    }
+    
+    .quantity-selector label {
+        font-size: 0.75rem;
+        margin-bottom: 1px;
+    }
+    
+    .quantity {
+        padding: 5px 8px;
+        font-size: 0.8rem;
     }
 
     .platter-item {
@@ -2102,8 +2282,8 @@ input[type="radio"]:checked + .payment-label {
     }
     
     .food-item {
-        padding: 6px 8px;
-        margin-bottom: 4px;
+        padding: 4px 6px;
+        margin-bottom: 2px;
     }
     
     .item-banner {
@@ -2138,12 +2318,12 @@ input[type="radio"]:checked + .payment-label {
     }
     
     .quantity-selector {
-        margin-top: 6px;
+        margin-top: -8px;
     }
     
     .quantity-selector label {
         font-size: 0.75rem;
-        margin-bottom: 2px;
+        margin-bottom: 1px;
     }
     
     .quantity {
@@ -2179,6 +2359,11 @@ input[type="radio"]:checked + .payment-label {
         width: 90px;
         height: 90px;
         font-size: 2.5rem;
+    }
+    
+    .combo-food-image {
+        width: 250px;
+        height: 160px;
     }
     
     .platter-option {
@@ -2271,8 +2456,8 @@ input[type="radio"]:checked + .payment-label {
     }
     
     .food-item {
-        padding: 6px 4px;
-        margin-bottom: 2px;
+        padding: 4px 3px;
+        margin-bottom: 1px;
         border-radius: 6px;
         width: 92%;
         margin-left: auto;
@@ -2323,12 +2508,12 @@ input[type="radio"]:checked + .payment-label {
     }
 
     .quantity-selector {
-        margin-top: 4px;
+        margin-top: -8px;
     }
 
     .quantity-selector label {
         font-size: 0.65rem;
-        margin-bottom: 1px;
+        margin-bottom: 0px;
     }
 
 .quantity {
@@ -2483,7 +2668,7 @@ input[type="radio"]:checked + .payment-label {
     }
     
     .food-item {
-        padding: 12px;
+        padding: 8px;
     }
     
     .item-banner {
@@ -2533,6 +2718,11 @@ input[type="radio"]:checked + .payment-label {
         width: 100px;
         height: 100px;
         font-size: 2.5rem;
+    }
+    
+    .combo-food-image {
+        width: 220px;
+        height: 140px;
     }
     
     .platter-option {
@@ -2742,6 +2932,11 @@ input[type="radio"]:checked + .payment-label {
         width: 80px;
         height: 80px;
         font-size: 2rem;
+    }
+    
+    .combo-food-image {
+        width: 180px;
+        height: 120px;
     }
 }
 
