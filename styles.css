@@ -8,7 +8,7 @@
 html {
     scroll-behavior: smooth;
     /* Fallback for browsers that don't support scroll-behavior */
-    scroll-padding-top: 140px; /* Account for fixed header */
+    scroll-padding-top: 160px; /* Account for fixed header - updated to match body padding */
 }
 
 body {
@@ -22,7 +22,7 @@ body {
     /* Prevent horizontal scroll */
     overflow-x: hidden;
     /* Smooth scrolling fallback */
-    scroll-padding-top: 140px;
+    scroll-padding-top: 160px;
 }
 
 /* Header Styles */
@@ -40,7 +40,7 @@ body {
 
 /* Add padding to body to prevent content from hiding behind fixed header */
 body {
-    padding-top: 140px; /* Adjust this value based on your header height */
+    padding-top: 160px; /* Increased padding to ensure content is visible below fixed header */
 }
 
 /* Remove fixed positioning on mobile */
@@ -626,6 +626,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 40px 20px;
+    margin-top: 20px; /* Additional top margin to ensure content is visible */
 }
 
 .food-items h2,
@@ -636,6 +637,7 @@ body {
     font-weight: 700;
     color: #dc2626;
     margin-bottom: 20px;
+    margin-top: 20px; /* Additional top margin to ensure heading is visible */
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
