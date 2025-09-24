@@ -65,6 +65,23 @@ class OrderManager {
         document.getElementById('customerForm').addEventListener('input', () => {
             this.validateForm();
         });
+
+        // Overlay controls
+        const overlay = document.getElementById('orderOverlay');
+        const closeBtn = document.getElementById('overlayClose');
+        const okBtn = document.getElementById('overlayOk');
+        const backdrop = document.querySelector('.order-overlay-backdrop');
+
+        const hideOverlay = () => {
+            if (overlay) {
+                overlay.classList.remove('visible');
+                overlay.setAttribute('aria-hidden', 'true');
+            }
+        };
+
+        if (closeBtn) closeBtn.addEventListener('click', hideOverlay);
+        if (okBtn) okBtn.addEventListener('click', hideOverlay);
+        if (backdrop) backdrop.addEventListener('click', hideOverlay);
     }
 
     updateItemQuantity(itemName, quantity, price) {
@@ -466,26 +483,35 @@ class OrderManager {
     }
 
     showOrderConfirmation(orderId) {
-        const confirmationSection = document.getElementById('orderConfirmation');
-        
-        confirmationSection.style.display = 'block';
-        confirmationSection.innerHTML = `
-            <h2>Order Confirmed!</h2>
-            <div class="confirmation-details">
-                <p><strong>Order ID:</strong> <span id="orderId">${orderId}</span></p>
-                <p><strong>Customer:</strong> <span id="confirmedName">${this.order.customerInfo.name}</span></p>
-                <p><strong>Mobile:</strong> <span id="confirmedMobile">${this.order.customerInfo.mobile}</span></p>
-                <p><strong>Payment Method:</strong> <span id="confirmedPayment">${this.order.customerInfo.paymentType.charAt(0).toUpperCase() + this.order.customerInfo.paymentType.slice(1)}</span></p>
-                <p><strong>Total Amount:</strong> <span id="confirmedTotal">${this.order.total.toFixed(2)}€</span></p>
-                <p><strong>Order Time:</strong> <span id="orderTime">${new Date().toLocaleString()}</span></p>
-            </div>
-        `;
-        
-        confirmationSection.scrollIntoView({ behavior: 'smooth' });
-        
-        // Reset form after 5 seconds
+        const overlay = document.getElementById('orderOverlay');
+        const content = document.getElementById('overlayContent');
+
+        if (content && overlay) {
+            const paymentLabel = this.order.customerInfo.paymentType.charAt(0).toUpperCase() + this.order.customerInfo.paymentType.slice(1);
+            const now = new Date().toLocaleString();
+
+            content.innerHTML = `
+                <p><strong>Order ID:</strong> ${orderId}</p>
+                <p><strong>Customer:</strong> ${this.order.customerInfo.name}</p>
+                <p><strong>Mobile:</strong> ${this.order.customerInfo.mobile}</p>
+                <p><strong>Payment Method:</strong> ${paymentLabel}</p>
+                <p><strong>Total Amount:</strong> ${this.order.total.toFixed(2)}€</p>
+                <p><strong>Order Time:</strong> ${now}</p>
+                <p style="margin-top:8px;color:#065f46;font-weight:600;">30€+ orders come with a lucky draw bonus!</p>
+            `;
+
+            overlay.classList.add('visible');
+            overlay.setAttribute('aria-hidden', 'false');
+        }
+
+        // Auto close and reload after 5 seconds
         setTimeout(() => {
-            this.resetOrder();
+            const overlayEl = document.getElementById('orderOverlay');
+            if (overlayEl) {
+                overlayEl.classList.remove('visible');
+                overlayEl.setAttribute('aria-hidden', 'true');
+            }
+            window.location.reload();
         }, 5000);
     }
 
@@ -505,7 +531,11 @@ class OrderManager {
             select.value = '0';
         });
 
-        document.getElementById('orderConfirmation').style.display = 'none';
+        const overlay = document.getElementById('orderOverlay');
+        if (overlay) {
+            overlay.classList.remove('visible');
+            overlay.setAttribute('aria-hidden', 'true');
+        }
         this.updateOrderSummary();
         this.validateForm();
     }

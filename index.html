@@ -436,21 +436,7 @@
             <button id="placeOrder" class="place-order-btn">Place Order</button>
         </section>
 
-        <!-- Order Confirmation -->
-        <section id="orderConfirmation" class="order-confirmation" style="display: none;">
-            <h2>Order Confirmed!</h2>
-            <div class="confirmation-details">
-                <p><strong>Order ID:</strong> <span id="orderId"></span></p>
-                <p><strong>Payment ID:</strong> <span id="paymentId"></span></p>
-                <p><strong>Customer:</strong> <span id="confirmedName"></span></p>
-                <p><strong>Mobile:</strong> <span id="confirmedMobile"></span></p>
-                <p><strong>Total Amount:</strong> <span id="confirmedTotal"></span></p>
-                <p><strong>Order Time:</strong> <span id="orderTime"></span></p>
-            </div>
-            <div class="special-offer">
-                <p>**30€+ orders come with a lucky draw bonus!</p>
-            </div>
-        </section>
+        
     </main>
 
     <!-- Footer -->
@@ -471,6 +457,17 @@
             <p>Contact + BIZUM: +34664822929</p>
         </div>
     </footer>
+
+    <!-- Order Success Overlay -->
+    <div id="orderOverlay" class="order-overlay" aria-hidden="true">
+        <div class="order-overlay-backdrop"></div>
+        <div class="order-overlay-dialog" role="dialog" aria-modal="true" aria-labelledby="orderOverlayTitle">
+            <button id="overlayClose" class="order-overlay-close" aria-label="Close">×</button>
+            <h2 id="orderOverlayTitle">Order Confirmed!</h2>
+            <div id="overlayContent" class="order-overlay-content"></div>
+            <button id="overlayOk" class="order-overlay-ok">OK</button>
+        </div>
+    </div>
 
     <script src="order.js"></script>
     <script src="script.js"></script>
