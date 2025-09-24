@@ -66,6 +66,12 @@ class OrderManager {
             this.validateForm();
         });
 
+        // Warning close button
+        const warningClose = document.getElementById('warningClose');
+        if (warningClose) {
+            warningClose.addEventListener('click', () => this.hideWarning());
+        }
+
         // Overlay controls
         const overlay = document.getElementById('orderOverlay');
         const closeBtn = document.getElementById('overlayClose');
@@ -381,12 +387,12 @@ class OrderManager {
         const selectedPayment = document.querySelector('input[name="paymentType"]:checked');
         
         if (!name || !mobile || !selectedPayment) {
-            alert('Please fill in all required fields.');
+            this.showWarning('Please fill in all required fields.');
             return;
         }
 
         if (!this.hasItemsInOrder()) {
-            alert('Please select at least one item to order.');
+            this.showWarning('Please select at least one item to order.');
             return;
         }
 
@@ -463,10 +469,28 @@ class OrderManager {
             this.showOrderConfirmation(orderId);
         } catch (error) {
             console.error('Error processing order:', error);
-            alert(`There was an error processing your order: ${error.message}. Please try again or contact support.`);
+            this.showWarning(`There was an error processing your order: ${error.message}. Please try again or contact support.`);
         } finally {
             placeOrderBtn.textContent = originalText;
             placeOrderBtn.disabled = false;
+        }
+    }
+
+    showWarning(message) {
+        const warningContainer = document.getElementById('warningContainer');
+        const warningText = document.getElementById('warningText');
+        if (warningText) {
+            warningText.textContent = message;
+        }
+        if (warningContainer) {
+            warningContainer.style.display = 'block';
+        }
+    }
+
+    hideWarning() {
+        const warningContainer = document.getElementById('warningContainer');
+        if (warningContainer) {
+            warningContainer.style.display = 'none';
         }
     }
 
