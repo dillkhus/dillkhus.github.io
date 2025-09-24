@@ -536,7 +536,7 @@ class OrderManager {
                 overlayEl.setAttribute('aria-hidden', 'true');
             }
             window.location.reload();
-        }, 5000);
+        }, 3000);
     }
 
     resetOrder() {
