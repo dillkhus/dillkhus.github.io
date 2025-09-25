@@ -1012,8 +1012,19 @@ body {
     line-height: 1.2;
 }
 
-.item-description {
-    color: #1f2937;
+.item-description{
+    color: #dc2626;
+    font-size: 0.9rem;
+    margin: 0 0 10px 0;
+    line-height: 1.5;
+    background: #fff7ed;
+    padding: 6px 10px;
+    border-left: 4px solid #fbbf24;
+    border-radius: 6px;
+}
+.item-description-regular {
+    color: #8e8c8c;
+    text-decoration: line-through;
     font-size: 0.9rem;
     margin: 0 0 10px 0;
     line-height: 1.5;
@@ -1542,7 +1553,8 @@ body {
         margin-bottom: 3px;
     }
     
-    .item-description {
+    .item-description,
+    .item-description-regular {
         font-size: 0.85rem;
         margin-bottom: 6px;
         padding: 6px 8px;
