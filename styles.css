@@ -892,6 +892,28 @@ body {
     margin-bottom: 40px;
 }
 
+/* Preorder notice (scoped to menu section): narrower and red */
+.food-items .preorder-notice {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #dc2626;
+    background: rgba(220, 38, 38, 0.08);
+    border: 2px solid #dc2626;
+    border-radius: 9999px;
+    padding: 6px 10px;
+    width: fit-content;
+    margin: 0 auto 12px;
+}
+
+.food-items .preorder-notice .notice-icon {
+    color: #dc2626;
+}
+
+.food-items .preorder-notice .notice-text {
+    font-weight: 700;
+}
+
 .food-item {
     background: white;
     border-radius: 12px;
@@ -1014,7 +1036,7 @@ body {
 
 .item-description{
     color: #dc2626;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     margin: 0 0 10px 0;
     line-height: 1.5;
     background: #fff7ed;
