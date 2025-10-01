@@ -915,6 +915,118 @@ body {
     font-weight: 700;
 }
 
+/* Closed state container styling */
+.food-items {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+    padding: 32px 24px;
+    max-width: 960px;
+    margin: 24px auto;
+    text-align: center;
+}
+
+.food-items h2 {
+    color: #dc2626;
+    margin-bottom: 14px;
+    position: relative;
+}
+
+.food-items h2::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -8px;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #dc2626, #b91c1c);
+    border-radius: 4px;
+}
+
+/* Event info card */
+.event-info {
+    display: inline-block;
+    text-align: left;
+    margin: 16px auto 0;
+    padding: 18px 20px;
+    border: 2px solid #dc2626;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(220,38,38,0.06), rgba(220,38,38,0.02));
+    box-shadow: 0 6px 20px rgba(220,38,38,0.12);
+}
+
+.event-info p {
+    margin: 6px 0;
+    font-weight: 600;
+}
+
+.event-info p strong {
+    color: #b91c1c;
+}
+
+/* Add contextual icons without changing HTML */
+.event-info p:nth-child(1)::before { content: '🎉 '; }
+.event-info p:nth-child(2)::before { content: '👥 '; }
+.event-info p:nth-child(3)::before { content: '📍 '; }
+.event-info p:nth-child(4)::before { content: '🚇 '; }
+.event-info p:nth-child(5)::before { content: '🕖 '; }
+
+/* Visit banner (above event card) */
+.visit-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    color: #7c2d12;
+    border: 2px solid #f59e0b;
+    border-radius: 9999px;
+    padding: 8px 14px;
+    font-weight: 700;
+    margin: 10px auto 8px;
+}
+
+.event-info .visit-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    color: #7c2d12;
+    border: 2px solid #f59e0b;
+    border-radius: 9999px;
+    padding: 8px 14px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+}
+
+.visit-icon {
+    font-size: 1.1rem;
+}
+
+.visit-text {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive tweaks for the closed state */
+@media (max-width: 768px) {
+    .food-items {
+        padding: 22px 16px;
+        margin: 16px 12px;
+        border-radius: 12px;
+    }
+    .food-items h2::after {
+        width: 60px;
+        height: 3px;
+        bottom: -6px;
+    }
+    .event-info {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
 .food-item {
     background: white;
     border-radius: 12px;
